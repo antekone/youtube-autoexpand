@@ -97,22 +97,32 @@ def out(buf, msg)
   Weechat.print(buf, msg)
 end
 
+def fix(str)
+  str.gsub("&amp;", "&")
+      .gsub("\u0026", "&")
+      .gsub("&lt;", "<")
+      .gsub("&gt;", ">")
+      .gsub("&quot;", "\"")
+      .gsub("&dash;", "-")
+      .gsub("&mdash;", "--")
+end
+
 def hook_print_cb(data, buffer, date, tags, displayed, highlight, prefix, message)
   yt = YoutubeExpander.new
   url = yt.extract_link_from message
   if url == nil
-    return Weechat.WEECHAT_RC_OK
+    return Weechat::WEECHAT_RC_OK
   end
 
   info = yt.expand(url)
   if info == nil
     out(buffer, "Error while autoexpanding this YouTube URL: #{url}")
-    return Weechat.WEECHAT_RC_OK
+    return Weechat::WEECHAT_RC_OK
   end
 
-  title = info[:title]
-  description = info[:description]
-  keywords = info[:keywords]
+  title = fix(info[:title])
+  description = fix(info[:description])
+  keywords = fix(info[:keywords])
 
   c1 = Weechat.color("red,white")
   c2 = Weechat.color("white,red")
