@@ -101,7 +101,6 @@ def hook_print_cb(data, buffer, date, tags, displayed, highlight, prefix, messag
   yt = YoutubeExpander.new
   url = yt.extract_link_from message
   if url == nil
-    out(buffer, "No link in this message")
     return Weechat.WEECHAT_RC_OK
   end
 
