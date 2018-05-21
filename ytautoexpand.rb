@@ -90,6 +90,8 @@ class YoutubeExpander
     {:error => "Too many redirects"}
   rescue RequestError => e
     {:error => "HTTP error"}
+  rescue URI::InvalidURIError => e
+    {:error => "URI error"}
   end
 end
 
@@ -105,6 +107,7 @@ def fix(str)
       .gsub("&quot;", "\"")
       .gsub("&dash;", "-")
       .gsub("&mdash;", "--")
+      .gsub("&#39;", "\"")
 end
 
 def hook_print_cb(data, buffer, date, tags, displayed, highlight, prefix, message)
