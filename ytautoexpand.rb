@@ -1,4 +1,5 @@
 require 'net/http'
+require 'cgi'
 
 $SIGNATURE = [
   'yt-autoexpand',
@@ -100,14 +101,7 @@ def out(buf, msg)
 end
 
 def fix(str)
-  str.gsub("&amp;", "&")
-      .gsub("\u0026", "&")
-      .gsub("&lt;", "<")
-      .gsub("&gt;", ">")
-      .gsub("&quot;", "\"")
-      .gsub("&dash;", "-")
-      .gsub("&mdash;", "--")
-      .gsub("&#39;", "\"")
+  CGI.unescapeHTML(str)
 end
 
 def hook_print_cb(data, buffer, date, tags, displayed, highlight, prefix, message)
